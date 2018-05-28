@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.ProductsFeeConfigMapper">
+    <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.ProductsFeeConfig">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="data_valid" jdbcType="INTEGER" property="dataValid"/>
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_user" jdbcType="VARCHAR" property="updatedUser"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="fee_name" jdbcType="VARCHAR" property="feeName"/>
+        <result column="fee_type" jdbcType="VARCHAR" property="feeType"/>
+        <result column="fee_rate" jdbcType="DECIMAL" property="feeRate"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="product_id" jdbcType="BIGINT" property="productId"/>
+        <result column="periods" jdbcType="INTEGER" property="periods"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, data_valid, created_user, created_time, updated_user, updated_time, fee_name,
+        fee_type, fee_rate, description, product_id, periods
+    </sql>
+    <insert id="insert" parameterType="com.xianjinxia.cashman.domain.ProductsFeeConfig">
+        insert into products_fee_config (id, data_valid, created_user,
+        created_time, updated_user, updated_time,
+        fee_name, fee_type, fee_rate,
+        description, product_id, periods
+        )
+        values (#{id,jdbcType=BIGINT}, #{dataValid,jdbcType=INTEGER}, #{createdUser,jdbcType=VARCHAR},
+        #{createdTime,jdbcType=TIMESTAMP}, #{updatedUser,jdbcType=VARCHAR}, #{updatedTime,jdbcType=TIMESTAMP},
+        #{feeName,jdbcType=VARCHAR}, #{feeType,jdbcType=VARCHAR}, #{feeRate,jdbcType=DECIMAL},
+        #{description,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{periods,jdbcType=INTEGER}
+        )
+    </insert>
+    <select id="selectByProductId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from products_fee_config
+        where product_id = #{productId,jdbcType=BIGINT} and data_valid =1 and fee_type in
+        <foreach collection="list" item="item" index="index"
+                 open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getByProductIdAndFeeTypeAndPeriods" resultMap="BaseResultMap">
+        select
+            fee_name,fee_type, fee_rate
+        from
+            products_fee_config
+        where
+            product_id = #{productId,jdbcType=BIGINT}
+            and fee_type=#{feeType,jdbcType=VARCHAR}
+            and periods= #{periods,jdbcType=INTEGER}
+            and data_valid =1
+    </select>
+
+    <select id="selectByProductIdAndfeeType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from products_fee_config
+        where product_id = #{productId,jdbcType=BIGINT}
+        and fee_type=#{feeType,jdbcType=VARCHAR}
+        and data_valid =1
+    </select>
+    <select id="selectMinPeriod" parameterType="Long" resultType="com.xianjinxia.cashman.domain.ProductsFeeConfig">
+        select
+          min(periods)
+        from
+          products_fee_config
+        where
+          product_id = #{productId,jdbcType=BIGINT}
+          and data_valid =1
+    </select>
+
+    <update id="updateByProductIdAndFeeTypeAndPeriods" parameterType="com.xianjinxia.cashman.domain.ProductsFeeConfig"  >
+        UPDATE products_fee_config
+        <set>
+            <if test="dataValid != null">
+                data_valid = #{dataValid,jdbcType=BIT},
+            </if>
+            <if test="updatedUser != null">
+                updated_user = #{updatedUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="feeName != null">
+                fee_name = #{feeName,jdbcType=VARCHAR},
+            </if>
+            <if test="feeType != null">
+                fee_type = #{feeType,jdbcType=VARCHAR},
+            </if>
+            <if test="feeRate != null">
+                fee_rate = #{feeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="periods != null">
+                periods = #{periods,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE product_id = #{productId,jdbcType=BIGINT}
+        AND fee_type = #{feeType,jdbcType=VARCHAR}
+        AND periods = #{periods,jdbcType=INTEGER}
+        and data_valid =1
+    </update>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.ContractMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.Contract">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contract_name" jdbcType="VARCHAR" property="contractName" />
+    <result column="contract_type" jdbcType="VARCHAR" property="contractType" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="contract_url" jdbcType="VARCHAR" property="contractUrl" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, contract_name, contract_type,product_id, contract_url, description, data_valid, updated_time,
+    created_user, created_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from contract
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.Contract">
+    insert into contract (id, contract_name, contract_type,product_id,
+      contract_url, description, data_valid, 
+      updated_time, created_user, created_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{contractName,jdbcType=VARCHAR},#{contractType,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT},
+      #{contractUrl,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{dataValid,jdbcType=BIT}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+
+  <select id="selectByProductId" parameterType="java.lang.Long" resultType="com.xianjinxia.cashman.dto.ContractDto">
+    select  contract_name   contractName , contract_url  contractUrl  , contract_type  contractType
+    from contract
+    where product_id = #{productId,jdbcType=BIGINT}
+  </select>
+
+
+</mapper>

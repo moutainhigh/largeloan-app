@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.StatisticsMapper">
+    <select id="countRepaymentNumber"  resultType="int">
+        select
+        count(id)
+        from
+        cashman_repayment_plan
+        where
+        repayment_plan_time = #{repaymentPlanTime,jdbcType=VARCHAR}
+        and product_id = #{productId,jdbcType=BIGINT}
+        and status in
+        <foreach collection="planStatus" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+    </select>
+
+    <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.dto.StatisticRepayOrderDto">
+        <result column="repayCount" jdbcType="INTEGER" property="orderCount"/>
+        <result column="repayment_origin_amount" jdbcType="INTEGER" property="repayPricipleAmount"/>
+        <result column="repayment_plan_time" jdbcType="VARCHAR" property="repaymentPlanTime" />
+    </resultMap>
+
+    <select id="countRepaymentForCollection"  resultMap="BaseResultMap">
+        select
+        count(t1.id) repayCount,
+        IFNULL(SUM(t1.repayment_origin_amount)/100,0) repayment_origin_amount,
+        t1.repayment_plan_time
+        from
+        cashman_repayment_plan t1,cashman_loan_order t2
+        where
+        t1.loan_order_id=t2.trd_loan_order_id
+        <if test="startRepaymentPlanTime != null">
+            <![CDATA[
+              AND t1.repayment_plan_time >= #{startRepaymentPlanTime,jdbcType=VARCHAR}
+              ]]>
+        </if>
+        <if test="endRepaymentPlanTime != null">
+            <![CDATA[
+              AND t1.repayment_plan_time <= #{endRepaymentPlanTime,jdbcType=VARCHAR}
+              ]]>
+        </if>
+        and t2.product_category  in
+        <foreach collection="productCategoryBig" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+        and  t1.`status` in
+        <foreach collection="planStatus" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+       and t2.`status` in
+        <foreach collection="orderStatus" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+        GROUP BY t1.repayment_plan_time
+    </select>
+
+
+</mapper>

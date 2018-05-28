@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.CollectRequestMapper">
+
+    <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.CollectRequest">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="repayment_plan_id" jdbcType="BIGINT" property="repaymentPlanId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="amount" jdbcType="INTEGER" property="amount"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="collect_type" jdbcType="INTEGER" property="collectType"/>
+        <result column="data_valid" jdbcType="BIT" property="dataValid"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id, repayment_plan_id, user_id,amount, status, data_valid, data_valid, version,
+      uuid, collect_type, remark, created_time, updated_time
+    </sql>
+
+    <insert id="insert" parameterType="com.xianjinxia.cashman.domain.CollectRequest" useGeneratedKeys="true" keyProperty="id">
+        insert into cashman_collect_req (
+          id, repayment_plan_id, user_id,amount,
+          status, collect_type,
+          uuid,
+          created_time, updated_time)
+        values (
+          #{id,jdbcType=BIGINT}, #{repaymentPlanId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{amount,jdbcType=INTEGER},
+          #{status,jdbcType=INTEGER}, #{collectType,jdbcType=INTEGER},
+          #{uuid,jdbcType=VARCHAR},
+          now(), now())
+    </insert>
+
+    <update id="updateStatusById">
+        UPDATE cashman_collect_req set status = #{status,jdbcType=INTEGER}, remark = #{remark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getUuidById" resultType="java.lang.String">
+        SELECT uuid from cashman_collect_req WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+</mapper>

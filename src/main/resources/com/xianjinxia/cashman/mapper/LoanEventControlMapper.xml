@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.LoanEventControlMapper">
+	<resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.LoanEventControl">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="event_id" jdbcType="BIGINT" property="eventId"/>
+		<result column="event_type" jdbcType="VARCHAR" property="eventType"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="uk_token" jdbcType="BIGINT" property="ukToken"/>
+		<result column="business_id" jdbcType="BIGINT" property="businessId"/>
+		<result column="business_type" jdbcType="VARCHAR" property="businessType"/>
+		<result column="remark" jdbcType="VARCHAR" property="remark"/>
+		<result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+		<result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser"/>
+	</resultMap>
+
+
+	<insert id="insert" parameterType="com.xianjinxia.cashman.domain.LoanEventControl">
+		insert into cashman_loan_event_control (event_id,event_type,
+		status,uk_token, business_id,business_type,remark,created_time,updated_time)
+		values (#{eventId,jdbcType=BIGINT},#{eventType,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{ukToken,jdbcType=BIGINT},
+		#{businessId,jdbcType=BIGINT},#{businessType,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
+	</insert>
+	
+	
+	<update id="update" parameterType="com.xianjinxia.cashman.domain.LoanEventControl">
+	   update cashman_loan_event_control set uk_token=#{ukToken,jdbcType=BIGINT},status=#{status,jdbcType=VARCHAR} where request_id=#{requestId,jdbcType=BIGINT}
+	</update>
+	
+	<select id="selectByBusinessId" resultType="java.lang.Long" >
+	  select id from cashman_loan_event_control where business_id=#{requestId,jdbcType=BIGINT}
+	</select>
+	
+	
+
+</mapper>

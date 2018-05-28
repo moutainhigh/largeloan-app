@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.CashmanRefundLogMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.CashmanRefundLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="loan_order_id" jdbcType="BIGINT" property="loanOrderId" />
+    <result column="repayment_plan_id" jdbcType="BIGINT" property="repaymentPlanId" />
+    <result column="repayment_record_id" jdbcType="BIGINT" property="repaymentRecordId" />
+    <result column="refund_amt" jdbcType="INTEGER" property="refundAmt" />
+    <result column="refund_channel" jdbcType="VARCHAR" property="refundChannel" />
+    <result column="refund_order_no" jdbcType="VARCHAR" property="refundOrderNo" />
+    <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.CashmanRefundLog">
+    insert into cashman_refund_log (id, user_phone,loan_order_id, repayment_plan_id,
+      repayment_record_id, refund_amt, refund_channel, 
+      refund_order_no, refund_time, created_time, 
+      updated_time, data_valid, version
+      )
+    values (#{id,jdbcType=BIGINT}, #{userPhone,jdbcType=VARCHAR}, #{loanOrderId,jdbcType=BIGINT}, #{repaymentPlanId,jdbcType=BIGINT},
+      #{repaymentRecordId,jdbcType=BIGINT}, #{refundAmt,jdbcType=INTEGER}, #{refundChannel,jdbcType=VARCHAR}, 
+      #{refundOrderNo,jdbcType=VARCHAR}, #{refundTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
+      now(), 1, 1
+      )
+  </insert>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.LoanUsageMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.LoanUsage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="usage_order" jdbcType="INTEGER" property="usageOrder" />
+    <result column="usage_code" jdbcType="VARCHAR" property="usageCode" />
+    <result column="usage_name" jdbcType="VARCHAR" property="usageName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <resultMap id="UsageDtoResultMap" type="com.xianjinxia.cashman.dto.LoanUsageDto">
+    <result column="usage_code" jdbcType="VARCHAR" property="usageCode" />
+    <result column="usage_name" jdbcType="VARCHAR" property="usageName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, usage_order, usage_code, usage_name, description, data_valid, updated_time, created_user, 
+    created_time
+  </sql>
+  <sql id="Usage_Dto_Column_List">
+    usage_code, usage_name
+  </sql>
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.LoanUsage">
+    insert into cashman_loan_usage (id, usage_order, usage_code, 
+      usage_name, description, data_valid, 
+      updated_time, created_user, created_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{usageOrder,jdbcType=INTEGER}, #{usageCode,jdbcType=VARCHAR}, 
+      #{usageName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{dataValid,jdbcType=BIT}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <select id="selectAllUsages"  resultMap="UsageDtoResultMap">
+    select
+    <include refid="Usage_Dto_Column_List" />
+    from cashman_loan_usage
+    where data_valid =1 ORDER BY usage_order
+  </select>
+
+  <select id="selectUsageBycode" parameterType="java.lang.String" resultMap="UsageDtoResultMap">
+    select
+    <include refid="Usage_Dto_Column_List" />
+    from cashman_loan_usage
+    where data_valid =1 AND usage_code = #{usageCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -1,0 +1,10 @@
+[DB1]
+    /db/20171221/db1.sql
+[DB2]
+    /db/20171221/cashman-app-mq.sql
+    /db/20171221/cashman-app-schedule-jobs.sql
+[CONTENT]
+    大额分期还款功能
+
+[DEVELOPER]
+

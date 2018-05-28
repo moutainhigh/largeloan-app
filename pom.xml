@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.xianjinxia</groupId>
+		<artifactId>app-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>cashman-app</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>cashman-app</name>
+	<description>cashman-app project for Spring Boot</description>
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.xianjingxia</groupId>
+			<artifactId>payment-client</artifactId>
+			<version>1.2-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.xianjinxia</groupId>
+			<artifactId>app-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- DB -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- TEST -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-mockmvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>spring-mock-mvc</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+		<!--swagger ui -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mapstruct</groupId>
+					<artifactId>mapstruct</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.eaio.uuid</groupId>
+			<artifactId>uuid</artifactId>
+			<version>3.2</version>
+		</dependency>
+
+		<!--apache common -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.xianjinxia</groupId>
+			<artifactId>logcenter-sdk</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.xjx</groupId>
+			<artifactId>mqclient</artifactId>
+			<version>1.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-feign</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.57</version>
+		</dependency>
+
+
+
+		<!-- redis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.2.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+		<!-- html 转 pdf 开始 -->
+		<dependency>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-core</artifactId>
+			<version>9.1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext-asian</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.0.8</version>
+			<exclusions>
+				<exclusion>
+					<groupId>bouncycastle</groupId>
+					<artifactId>bcmail-jdk14</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>bouncycastle</groupId>
+					<artifactId>bcprov-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.xhtmlrenderer</groupId>
+			<artifactId>core-renderer</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcmail-jdk15on</artifactId>
+			<version>1.48</version>
+
+		</dependency>
+		<!-- html 转 pdf 结束 -->
+
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.tech</groupId>
+			<artifactId>tech-sdk</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>oss_op</groupId>
+			<artifactId>oss_op</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
+		<dependency>
+			<groupId>com.alipay.sdk</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${name}</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>conf</directory>
+				<includes>
+					<include>*.ttc</include>
+				</includes>
+				<targetPath>${basedir}/target/classes</targetPath>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<outputDirectory>
+								${project.build.directory}
+							</outputDirectory>   <!-- 表示把配置文件拷到和jar包同一个路径下 -->
+							<resources>
+								<resource>
+									<directory>conf</directory>
+									<includes>
+										<include>*.ttc</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.3.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>5.1.42</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.xianjinxia.cashman.CashmanApplication</mainClass>
+					<executable>true</executable>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<spring.profile>prod</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>FILE</logback.output>
+				<log.path>/var/cashman-app/log/</log.path>
+				<oss.accessKeyId>LTAInmnTOfPBeqFx</oss.accessKeyId>
+				<oss.accessKeySecret>Q3sh8SQDvevrkKoRs0Tua7nanXXRrC</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+		</profile>
+
+		<profile>
+			<id>preprod</id>
+			<properties>
+				<spring.profile>preprod</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>FILE</logback.output>
+				<log.path>/var/cashman-app/log/</log.path>
+				<oss.accessKeyId>LTAIn8IcydufdthO</oss.accessKeyId>
+				<oss.accessKeySecret>X75KRavk0mgLcmkgVX1YgR8zoDC5OI</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>docker1</id>
+			<properties>
+				<spring.profile>docker1</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>FILE</logback.output>
+				<log.path>/var/app/log/</log.path>
+				<oss.accessKeyId>LTAIn8IcydufdthO</oss.accessKeyId>
+				<oss.accessKeySecret>X75KRavk0mgLcmkgVX1YgR8zoDC5OI</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>docker2</id>
+			<properties>
+				<spring.profile>docker2</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>FILE</logback.output>
+				<log.path>/var/app/log/</log.path>
+				<oss.accessKeyId>LTAIn8IcydufdthO</oss.accessKeyId>
+				<oss.accessKeySecret>X75KRavk0mgLcmkgVX1YgR8zoDC5OI</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>docker3</id>
+			<properties>
+				<spring.profile>docker3</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>FILE</logback.output>
+				<log.path>/var/app/log/</log.path>
+				<oss.accessKeyId>LTAIn8IcydufdthO</oss.accessKeyId>
+				<oss.accessKeySecret>X75KRavk0mgLcmkgVX1YgR8zoDC5OI</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>local</id>
+			<properties>
+				<spring.profile>local</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>CONSOLE</logback.output>
+				<log.path>./</log.path>
+				<oss.accessKeyId>LTAIn8IcydufdthO</oss.accessKeyId>
+				<oss.accessKeySecret>X75KRavk0mgLcmkgVX1YgR8zoDC5OI</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>docker01</id>
+			<properties>
+				<spring.profile>docker01</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>FILE</logback.output>
+				<log.path>/var/app/log/</log.path>
+				<oss.accessKeyId>LTAIn8IcydufdthO</oss.accessKeyId>
+				<oss.accessKeySecret>X75KRavk0mgLcmkgVX1YgR8zoDC5OI</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>docker5</id>
+			<properties>
+				<spring.profile>docker5</spring.profile>
+				<logback.loglevel>INFO</logback.loglevel>
+				<logback.output>FILE</logback.output>
+				<log.path>/var/app/log/</log.path>
+				<oss.accessKeyId>LTAIn8IcydufdthO</oss.accessKeyId>
+				<oss.accessKeySecret>X75KRavk0mgLcmkgVX1YgR8zoDC5OI</oss.accessKeySecret>
+			</properties>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+	</profiles>
+
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nexus</id>
+			<name>team nexus repository</name>
+			<url>http://nexus.xianjinxia.com:8081/repository/maven-public/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+</project>

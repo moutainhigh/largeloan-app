@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.RepaymentRecordMapper">
+	<resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.RepaymentRecord">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="user_id" jdbcType="BIGINT" property="userId" />
+		<result column="repayment_plan_id" jdbcType="BIGINT" property="repaymentPlanId" />
+		<result column="payment_request_id" jdbcType="BIGINT" property="paymentRequestId" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="amount" jdbcType="INTEGER" property="amount" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+		<result column="payment_type" jdbcType="VARCHAR" property="paymentType" />
+		<result column="loan_order_id" jdbcType="VARCHAR" property="loanOrderId" />
+		<result column="repay_principal_amt" jdbcType="INTEGER" property="repayPrincipalAmt" />
+		<result column="repay_interest_amt" jdbcType="INTEGER" property="repayInterestAmt" />
+		<result column="repay_overdue_amt" jdbcType="INTEGER" property="repayOverdueAmt" />
+		<result column="refund_amt" jdbcType="INTEGER" property="refundAmt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_id, repayment_plan_id, payment_request_id, status, amount, remark, created_at,
+		updated_at, payment_type, loan_order_id,repay_principal_amt,repay_interest_amt,repay_overdue_amt, refund_amt
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from cashman_repayment_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="selectByPaymentRequestId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from cashman_repayment_record
+		where payment_request_id = #{paymentRequestId,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByRepaymentPlanId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from cashman_repayment_record
+		where repayment_plan_id = #{repaymentPlanId,jdbcType=BIGINT}
+		order by created_at desc
+	</select>
+
+	<select id="selectRepaymentedRecords" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from cashman_repayment_record
+		where repayment_plan_id = #{repaymentPlanId,jdbcType=BIGINT} and status = 2
+		order by created_at desc
+	</select>
+
+	<select id="countByRepaymentPlanId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		select
+		count(1)
+		from
+		cashman_repayment_record
+		where
+		repayment_plan_id = #{repaymentPlanId,jdbcType=BIGINT}
+		and status=0
+	</select>
+
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from cashman_repayment_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.xianjinxia.cashman.domain.RepaymentRecord" useGeneratedKeys="true" keyProperty="id">
+		insert into cashman_repayment_record (id, user_id, repayment_plan_id,
+		payment_request_id, status, amount,
+		remark, created_at, updated_at,
+		payment_type, loan_order_id,
+		repay_principal_amt,repay_interest_amt,repay_overdue_amt, refund_amt)
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{repaymentPlanId,jdbcType=BIGINT},
+		#{paymentRequestId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER},
+		#{remark,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP},
+		#{paymentType,jdbcType=VARCHAR},
+		#{loanOrderId,jdbcType=VARCHAR},
+		#{repayPrincipalAmt,jdbcType=INTEGER},
+		#{repayInterestAmt,jdbcType=INTEGER},
+		#{repayOverdueAmt,jdbcType=INTEGER},
+		#{refundAmt,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.xianjinxia.cashman.domain.RepaymentRecord">
+		insert into cashman_repayment_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="repaymentPlanId != null">
+				repayment_plan_id,
+			</if>
+			<if test="paymentRequestId != null">
+				payment_request_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="amount != null">
+				amount,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="createdAt != null">
+				created_at,
+			</if>
+			<if test="updatedAt != null">
+				updated_at,
+			</if>
+			<if test="paymentType != null">
+				payment_type,
+			</if>
+			<if test="loanOrderId != null">
+				loanOrderId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="repaymentPlanId != null">
+				#{repaymentPlanId,jdbcType=BIGINT},
+			</if>
+			<if test="paymentRequestId != null">
+				#{paymentRequestId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				#{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				#{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentType != null">
+				#{paymentType,jdbcType=VARCHAR},
+			</if>
+			<if test="loanOrderId != null">
+				#{loanOrderId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.xianjinxia.cashman.domain.RepaymentRecord">
+		update cashman_repayment_record
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="repaymentPlanId != null">
+				repayment_plan_id = #{repaymentPlanId,jdbcType=BIGINT},
+			</if>
+			<if test="paymentRequestId != null">
+				payment_request_id = #{paymentRequestId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentType != null">
+				payment_type = #{paymentType,jdbcType=VARCHAR},
+			</if>
+			<if test="loanOrderId != null">
+				loan_order_id = #{loanOrderId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.xianjinxia.cashman.domain.RepaymentRecord">
+		update cashman_repayment_record
+		set user_id = #{userId,jdbcType=BIGINT},
+		repayment_plan_id = #{repaymentPlanId,jdbcType=BIGINT},
+		payment_request_id = #{paymentRequestId,jdbcType=BIGINT},
+		status = #{status,jdbcType=INTEGER},
+		amount = #{amount,jdbcType=INTEGER},
+		remark = #{remark,jdbcType=VARCHAR},
+		created_at = #{createdAt,jdbcType=TIMESTAMP},
+		updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+		payment_type = #{paymentType,jdbcType=VARCHAR},
+		loan_order_id = #{loanOrderId,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updatePaymentOrderStatus">
+		update
+		cashman_repayment_record
+		set
+		status = #{targetStatus,jdbcType=INTEGER},
+		updated_at = now()
+		where
+		payment_request_id = #{paymentRequestId,jdbcType=BIGINT}
+		and status= #{originStatus, jdbcType=INTEGER}
+	</update>
+	<update id="updateRefundAmt">
+		update
+		cashman_repayment_record
+		set
+		refund_amt = refund_amt-#{refundAmt,jdbcType=INTEGER},
+		updated_at = now()
+		where
+		id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

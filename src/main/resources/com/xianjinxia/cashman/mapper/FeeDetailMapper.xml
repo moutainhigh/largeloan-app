@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.FeeDetailMapper">
+    <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.FeeDetail">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="fee_type" jdbcType="VARCHAR" property="feeType"/>
+        <result column="fee_amount" jdbcType="INTEGER" property="feeAmount"/>
+        <result column="trd_loan_order_id" jdbcType="BIGINT" property="trdLoanOrderId"/>
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, fee_type, fee_amount, trd_loan_order_id, created_user, created_time, updated_time
+    </sql>
+    <insert id="insert" parameterType="com.xianjinxia.cashman.domain.FeeDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into cashman_fee_detail (id, fee_type, fee_amount,
+        trd_loan_order_id, created_user, created_time)
+        values (#{id,jdbcType=BIGINT}, #{feeType,jdbcType=VARCHAR}, #{feeAmount,jdbcType=INTEGER},
+        #{trdLoanOrderId,jdbcType=BIGINT}, #{createdUser,jdbcType=VARCHAR}, now())
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cashman_fee_detail
+        where id=#{id,jdbcType=BIGINT}
+    </select>
+</mapper>

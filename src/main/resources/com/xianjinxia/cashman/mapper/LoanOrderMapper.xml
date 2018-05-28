@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.LoanOrderMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.LoanOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="trd_loan_order_id" jdbcType="BIGINT" property="trdLoanOrderId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="biz_seq_no" jdbcType="VARCHAR" property="bizSeqNo" />
+    <result column="order_type" jdbcType="VARCHAR" property="orderType" />
+    <result column="order_amount" jdbcType="INTEGER" property="orderAmount" />
+    <result column="fee_amount" jdbcType="INTEGER" property="feeAmount" />
+    <result column="interest_amount" jdbcType="INTEGER" property="interestAmount" />
+    <result column="payment_amount" jdbcType="INTEGER" property="paymentAmount" />
+    <result column="repayment_amount" jdbcType="INTEGER" property="repaymentAmount" />
+    <result column="periods" jdbcType="INTEGER" property="periods" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_category" jdbcType="INTEGER" property="productCategory" />
+    <result column="user_bank_card_id" jdbcType="BIGINT" property="userBankCardId" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="last_four_bank_card_no" jdbcType="VARCHAR" property="lastFourBankCardNo" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="loan_usage" jdbcType="VARCHAR" property="loanUsage" />
+    <result column="user_type" jdbcType="BIT" property="userType" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="terminal" jdbcType="VARCHAR" property="terminal" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+    <result column="trace_no" jdbcType="VARCHAR" property="traceNo" />
+      <result column="loan_time" jdbcType="TIMESTAMP" property="loanTime" />
+      <result column="review_fail_time" jdbcType="TIMESTAMP" property="reviewFailTime" />
+    <result column="is_depository" jdbcType="VARCHAR" property="isDepository" />
+    <result column="term_unit" jdbcType="VARCHAR" property="termUnit" />
+    <result column="term_rate" jdbcType="DECIMAL" property="termRate" />
+      <result column="merchant_no" jdbcType="VARCHAR" property="merchantNo" />
+      <result column="speed_card_id" jdbcType="VARCHAR" property="speedCardId" />
+      <result column="speed_card_pay_status" jdbcType="VARCHAR" property="speedCardPayStatus" />
+  </resultMap>
+  <resultMap id="CustodyLoanResultMap" type="com.xianjinxia.cashman.dto.LoanOrderDto" extends="BaseResultMap">
+      <result column="term" jdbcType="VARCHAR" property="term"/>
+      <result column="term_type" jdbcType="VARCHAR" property="termType"/>
+      <collection property="repaymentPlans" ofType="com.xianjinxia.cashman.dto.CustodyRepayScheduleDtailInfo">
+            <result column="period" jdbcType="BIGINT" property="period"/>
+            <result column="repayment_plan_time" jdbcType="TIMESTAMP" property="planRepaymentTime"/>
+            <result column="repayment_origin_amount" jdbcType="INTEGER" property="planRepaymentAmount"/>
+            <result column="repayment_principal_amount" jdbcType="INTEGER" property="planRepaymentPrincipal"/>
+            <result column="repayment_interest_amount" jdbcType="INTEGER" property="planRepaymentInterest"/>
+            <result column="interest_rate" jdbcType="DECIMAL" property="apr"/>
+      </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, trd_loan_order_id, user_id, biz_seq_no, order_type, order_amount, fee_amount, interest_amount,
+    payment_amount, repayment_amount, periods, product_id, product_category, user_bank_card_id,loan_usage,loan_time,review_fail_time,
+    bank_name, last_four_bank_card_no, remark, user_type, user_phone, user_name, status, 
+    source, terminal, created_time, created_user, updated_time, data_valid, trace_no,is_depository,term_unit,term_rate,merchant_no,speed_card_id,speed_card_pay_status
+  </sql>
+    <update id="updateLoanOrderStatus">
+        update
+          cashman_loan_order
+        set
+          status = #{status, jdbcType=VARCHAR}
+        where
+          id = #{id, jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateLoanOrderStatusByTrdLoanOrderId">
+        update
+        cashman_loan_order
+        set
+        status = #{status, jdbcType=VARCHAR}
+        where
+        trd_loan_order_id = #{trdLoanOrderId, jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cashman_loan_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByTrdOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_loan_order
+    where trd_loan_order_id = #{trdLoanOrderId,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.LoanOrder">
+    insert into cashman_loan_order (id, trd_loan_order_id, user_id, 
+        biz_seq_no, order_type, order_amount, interest_amount,
+        fee_amount, payment_amount, repayment_amount,
+        periods, product_id, product_category, loan_usage,
+        user_bank_card_id, bank_name, last_four_bank_card_no,
+        remark,user_type, user_phone,
+        user_name, status, source,
+        terminal, created_time, created_user,trace_no,
+        loan_time,review_fail_time,
+        is_depository,term_unit,term_rate,merchant_no,speed_card_id)
+    values (#{id,jdbcType=BIGINT}, #{trdLoanOrderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+        #{bizSeqNo,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{orderAmount,jdbcType=INTEGER},
+        #{interestAmount,jdbcType=INTEGER},#{feeAmount,jdbcType=INTEGER}, #{paymentAmount,jdbcType=INTEGER},
+        #{repaymentAmount,jdbcType=INTEGER},#{periods,jdbcType=INTEGER}, #{productId,jdbcType=BIGINT},
+        #{productCategory,jdbcType=INTEGER},#{loanUsage,jdbcType=VARCHAR},#{userBankCardId,jdbcType=BIGINT},
+        #{bankName,jdbcType=VARCHAR}, #{lastFourBankCardNo,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}, #{userType,jdbcType=BIT}, #{userPhone,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR},
+        #{terminal,jdbcType=VARCHAR}, now(), #{createdUser,jdbcType=VARCHAR},#{traceNo,jdbcType=VARCHAR},
+        #{loanTime,jdbcType=TIMESTAMP},#{reviewFailTime,jdbcType=TIMESTAMP},
+        #{isDepository,jdbcType=VARCHAR},#{termUnit,jdbcType=VARCHAR},#{termRate,jdbcType=DECIMAL},#{merchantNo,jdbcType=VARCHAR},
+        #{speedCardId,jdbcType=VARCHAR}
+)
+  </insert>
+
+  <select id="selectByProductCategoryAndStatus" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        FROM cashman_loan_order
+        WHERE
+        data_valid = 1
+        and product_category in
+        <foreach collection="productCategoryList" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+        and status in
+        <foreach collection="statusList" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+
+  </select>
+
+    <update id="updateselective" >
+        UPDATE cashman_loan_order
+        <set>
+            <if test="loanTime != null">
+                loan_time = #{loanTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="traceNo != null">
+                trace_no= #{traceNo,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+        AND status = #{prestatus,jdbcType=VARCHAR}
+    </update>
+    
+    <select id="selectByBizSeqNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM cashman_loan_order
+        WHERE biz_seq_no = #{bizSeqNo,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateStatus">
+    update
+        cashman_loan_order
+        set
+        status = #{newStatus, jdbcType=VARCHAR},
+        updated_time = now()
+        <if test="reviewFailTime != null">
+          ,review_fail_time=#{reviewFailTime,jdbcType=TIMESTAMP}
+        </if>
+        where
+        id = #{id, jdbcType=BIGINT}
+        and status=#{oldStatus,jdbcType=VARCHAR}
+    </update>
+
+    <select id="countOrderByUserIdAndStatus" resultType="java.lang.Integer">
+        select
+        count(1)
+        from
+        cashman_loan_order
+        where
+        user_id = #{userId,jdbcType=BIGINT}
+        and status in
+        <foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </select>
+
+    <!-- 添加获取待解冻订单数据开始 -->
+    <resultMap id="BaseUnfreezeResultMap" type="com.xianjinxia.cashman.response.UnfreezeOrdersResponse">
+        <result column="biz_seq_no" jdbcType="VARCHAR" property="bizSeqNo" />
+        <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+        <result column="merchant_no" jdbcType="VARCHAR" property="merchantNo" />
+    </resultMap>
+
+    <select id="selectUnfreezeOrders" resultMap="BaseUnfreezeResultMap">
+        select
+        biz_seq_no,user_phone,merchant_no
+        from cashman_loan_order
+        where data_valid=1
+        and merchant_no = #{merchantNo,jdbcType=VARCHAR}
+        and product_id = #{productId,jdbcType=BIGINT}
+        and status in
+        <foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+        and Date(review_fail_time) = #{reviewFailTime,jdbcType=TIMESTAMP}
+        order by id desc
+    </select>
+    <!-- 添加获取待解冻订单数据结束 -->
+
+    <update id="updateSpeedCardPayStatus">
+        update cashman_loan_order
+        set speed_card_pay_status=#{speedCardPayStatus,jdbcType=VARCHAR}
+        where id=#{id,jdbcType=BIGINT}
+    </update>
+
+    <!-- 添加获取待解冻订单数据开始 -->
+    <resultMap id="SpeedCardRepayResultMap" type="com.xianjinxia.cashman.dto.SpeedCardRepayDto">
+        <id column="id" jdbcType="BIGINT" property="orderId" />
+        <result column="speed_card_pay_status" jdbcType="VARCHAR" property="speedCardPayStatus" />
+    </resultMap>
+
+    <select id="getSpeedRepayStatus" resultMap="SpeedCardRepayResultMap">
+        select id,
+        speed_card_pay_status
+        from cashman_loan_order
+        where data_valid=1 and trd_loan_order_id = #{trdLoanOrderId, jdbcType=BIGINT}
+        and status in
+        <foreach item="item" index="index" collection="orderStatus" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </select>
+
+
+    <!-- 添加查询订单的提速卡还款状态为支付失败，订单状态为审核通过 开始 -->
+    <sql id="Speed_Card_Info_Column_List">
+        id, trd_loan_order_id,  status, trace_no,product_category
+    </sql>
+    <resultMap id="BaseSpeedResultMap" type="com.xianjinxia.cashman.dto.LoanOrderSpeedDto">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="trd_loan_order_id" jdbcType="BIGINT" property="trdLoanOrderId" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="trace_no" jdbcType="VARCHAR" property="traceNo" />
+        <result column="product_category" jdbcType="INTEGER" property="productCategory" />
+    </resultMap>
+    <select id="selectByCategoryAndSpeedStatus" resultMap="BaseSpeedResultMap">
+        select <include refid="Speed_Card_Info_Column_List"/>
+        FROM cashman_loan_order
+        WHERE
+        data_valid = 1
+        and product_category in
+        <foreach collection="productCategoryList" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+        and status in
+        <foreach  collection="status" item="item" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+        and speed_card_pay_status in
+        <foreach collection="speedCardPayStatus" item="param" open="(" separator="," close=")">
+            #{param}
+        </foreach>
+        <if test="updateTime != null">
+            <![CDATA[
+              and updated_time <= #{updateTime,jdbcType=TIMESTAMP}
+              ]]>
+        </if>
+    </select>
+
+    <update id="updateStatusForSpeed">
+        update
+        cashman_loan_order
+        set
+        status = #{newStatus, jdbcType=VARCHAR},
+        updated_time = now()
+        where
+        id = #{id, jdbcType=BIGINT}
+        and status=#{oldStatus,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateLoanOrderStatus2Over">
+        UPDATE cashman_loan_order
+        SET `status` = 50
+        where periods = (SELECT count(`status`) from cashman_repayment_plan where loan_order_id = #{trdLoanOrderId, jdbcType=BIGINT} and `status` = 30)
+        and trd_loan_order_id = #{trdLoanOrderId, jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByUserPhone" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from cashman_loan_order
+        where data_valid = 1
+        and user_phone = #{userPhone,jdbcType=VARCHAR}
+        and merchant_no = #{merchantNo,jdbcType=VARCHAR}
+        and status in ('21', '40')
+    </select>
+
+</mapper>

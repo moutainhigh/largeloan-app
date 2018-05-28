@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.LoanCapitalInfoMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.LoanCapitalInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="trd_loan_order_id" jdbcType="BIGINT" property="trdLoanOrderId" />
+    <result column="capital_payers" jdbcType="VARCHAR" property="capitalPayers" />
+    <result column="capital_company" jdbcType="VARCHAR" property="capitalCompany" />
+    <result column="capital_city" jdbcType="VARCHAR" property="capitalCity" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, trd_loan_order_id, capital_payers, capital_company, capital_city, created_at, 
+    update_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cashman_loan_capital_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.LoanCapitalInfo">
+    insert into cashman_loan_capital_info (id, trd_loan_order_id, capital_payers, 
+      capital_company, capital_city, created_at,update_time)
+    values (#{id,jdbcType=BIGINT}, #{trdLoanOrderId,jdbcType=BIGINT}, #{capitalPayers,jdbcType=VARCHAR}, 
+      #{capitalCompany,jdbcType=VARCHAR}, #{capitalCity,jdbcType=VARCHAR}, now(),
+      now())
+  </insert>
+  <select id="getLoanCapitalInfoByOrdId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_loan_capital_info
+    where 1=1 AND trd_loan_order_id = #{trdLoanOrderId,jdbcType=BIGINT}
+  </select>
+</mapper>

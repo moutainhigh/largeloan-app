@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: cashman-app
+  mvc:
+    favicon:
+      enabled: false
+  thymeleaf:
+    mode: XHTML
+  profiles:
+    active: local
+
+server:
+  context-path: /
+  tomcat:
+    accept-count: 1
+    max-threads: 1
+    min-spare-threads: 1
+    max-connections: 1
+
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+ext:
+    swagger:
+        title: cashman-app API
+        description: cashman-app API documentation
+        version: 0.0.1
+        termsOfServiceUrl:
+        contactName:
+        contactUrl:
+        contactEmail:
+        license:
+        licenseUrl:

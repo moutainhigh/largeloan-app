@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.ScheduleTaskRiskControlPushMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.ScheduleTaskRiskControlPush">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="trd_loan_order_id" jdbcType="BIGINT" property="trdLoanOrderId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_type" jdbcType="BIT" property="userType" />
+    <result column="biz_seq_no" jdbcType="VARCHAR" property="bizSeqNo" />
+    <result column="product_category" jdbcType="INTEGER" property="productCategory" />
+      <result column="user_bank_card_id" jdbcType="BIGINT" property="userBankCardId" />
+      <result column="merchant_no" jdbcType="VARCHAR" property="merchantNo"/>
+  </resultMap>
+  
+  <select id="selectRiskControlPushList" resultMap="BaseResultMap">
+      SELECT 
+        id,
+        trd_loan_order_id,
+        user_id,
+        status,
+        user_name,
+        user_phone,
+        user_type,
+        biz_seq_no,
+        product_category,
+        user_bank_card_id,
+        merchant_no
+      FROM cashman_loan_order
+      WHERE data_valid = 1 
+      <if test="status!=null">
+		 and status = #{status}
+	  </if>
+      <if test="createdTime !=null">
+         and created_time = #{createdTime,jdbcType=DATE}
+      </if>
+  </select>
+  
+  <update id="updateStatus">
+      update cashman_loan_order
+      set
+        status = #{newStatus},
+        remark = #{remark},
+        updated_time = now()
+      where
+        id = #{id,jdbcType=BIGINT}
+        and status = #{preStatus}
+        and data_valid = 1
+  </update>
+
+</mapper>

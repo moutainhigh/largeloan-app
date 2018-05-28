@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.ScheduleTaskLockMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.ScheduleTaskLock">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="lock_key" jdbcType="VARCHAR" property="lockKey" />
+    <result column="time_out" jdbcType="BIGINT" property="timeOut" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, lock_key, time_out, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_schedule_task_lock
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByLockKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_schedule_task_lock
+    where lock_key = #{lockKey,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_schedule_task_lock
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from cashman_schedule_task_lock
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+  <delete id="deleteByLockKey" parameterType="java.lang.String">
+    delete from cashman_schedule_task_lock
+    where lock_key = #{lock_key,jdbcType=VARCHAR}
+  </delete>
+
+
+
+
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.ScheduleTaskLock">
+    insert into cashman_schedule_task_lock (id, lock_key, time_out, 
+      create_time)
+    values (#{id,jdbcType=BIGINT}, #{lockKey,jdbcType=VARCHAR}, #{timeOut,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xianjinxia.cashman.domain.ScheduleTaskLock">
+    insert into cashman_schedule_task_lock
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="lockKey != null">
+        lock_key,
+      </if>
+      <if test="timeOut != null">
+        time_out,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="lockKey != null">
+        #{lockKey,jdbcType=VARCHAR},
+      </if>
+      <if test="timeOut != null">
+        #{timeOut,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xianjinxia.cashman.domain.ScheduleTaskLock">
+    update cashman_schedule_task_lock
+    <set>
+      <if test="lockKey != null">
+        lock_key = #{lockKey,jdbcType=VARCHAR},
+      </if>
+      <if test="timeOut != null">
+        time_out = #{timeOut,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xianjinxia.cashman.domain.ScheduleTaskLock">
+    update cashman_schedule_task_lock
+    set lock_key = #{lockKey,jdbcType=VARCHAR},
+      time_out = #{timeOut,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.PaymentRequestMapper">
+	<resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.PaymentRequest">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="user_id" jdbcType="BIGINT" property="userId" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="amount" jdbcType="INTEGER" property="amount" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="expired_at" jdbcType="TIMESTAMP" property="expiredAt" />
+		<result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+		<result column="resp_order_id" jdbcType="VARCHAR" property="respOrderId" />
+		<result column="resp_time" jdbcType="TIMESTAMP" property="respTime" />
+		<result column="resp_msg" jdbcType="VARCHAR" property="respMsg" />
+		<result column="payment_type" jdbcType="VARCHAR" property="paymentType" />
+		<result column="payment_channel" jdbcType="VARCHAR" property="paymentChannel" />
+		<result column="third_order_no" jdbcType="VARCHAR" property="thirdOrderNo" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_id, status, amount, remark, expired_at, created_at, updated_at, resp_order_id, resp_time,
+		resp_msg,payment_type,payment_channel,third_order_no
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from cashman_payment_request
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="countByUserIdAndStatus" resultType="int">
+		select
+			count(1)
+		from
+			cashman_payment_request
+		where
+		user_id = #{userId,jdbcType=BIGINT}
+		and status = #{status,jdbcType=INTEGER}
+	</select>
+
+
+	<insert id="insert" parameterType="com.xianjinxia.cashman.domain.PaymentRequest" useGeneratedKeys="true" keyProperty="id">
+		insert into cashman_payment_request (id, user_id, status,
+		amount, remark, expired_at, created_at,
+		updated_at, resp_order_id, resp_time,
+		resp_msg, payment_type, payment_channel, third_order_no)
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER},
+		#{amount,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{expiredAt,jdbcType=TIMESTAMP},
+		#{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{respOrderId,jdbcType=VARCHAR},
+		#{respTime,jdbcType=TIMESTAMP},
+		#{respMsg,jdbcType=VARCHAR}, #{paymentType,jdbcType=VARCHAR},
+		#{paymentChannel,jdbcType=VARCHAR}, #{thirdOrderNo,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.xianjinxia.cashman.domain.PaymentRequest">
+		update cashman_payment_request
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="expiredAt != null">
+				expired_at = #{expiredAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="respOrderId != null">
+				resp_order_id = #{respOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="respTime != null">
+				resp_time = #{respTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="respMsg != null">
+				resp_msg = #{respMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentType != null">
+				payment_type = #{paymentType,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentChannel != null">
+				payment_channel=#{paymentChannel,jdbcType=VARCHAR},
+			</if>
+			<if test="thirdOrderNo != null">
+				third_order_no=#{thirdOrderNo,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectByExpiredTime" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from cashman_payment_request
+		where now() &gt; expired_at
+		and status = 0
+	</select>
+	<select id="selectByStatusAndExpiredTime" resultType="com.xianjinxia.cashman.domain.PaymentRequest">
+		select
+			<include refid="Base_Column_List" />
+		from
+			cashman_payment_request
+		where
+			#{expiredTime,jdbcType=TIMESTAMP} &gt; expired_at
+			and status = #{status,jdbcType=INTEGER}
+	</select>
+	<select id="selectByUserIdAndStatus" resultType="com.xianjinxia.cashman.domain.PaymentRequest">
+		select
+			<include refid="Base_Column_List" />
+		from
+			cashman_payment_request
+		where
+		user_id = #{userId,jdbcType=BIGINT}
+		and status = #{status,jdbcType=INTEGER}
+	</select>
+	<select id="selectExpiredPaymentRequest" resultType="com.xianjinxia.cashman.domain.PaymentRequest">
+		select
+		<include refid="Base_Column_List" />
+		from
+		cashman_payment_request
+		where
+		#{expiredTime,jdbcType=TIMESTAMP} &gt; expired_at
+		and status = #{status,jdbcType=INTEGER}
+		and payment_type = #{paymentType,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getPaymentRequestByRespOrderId" resultType="com.xianjinxia.cashman.domain.PaymentRequest">
+		select
+		<include refid="Base_Column_List"/>
+		from
+		cashman_payment_request
+		where
+		1=1
+		<if test="thirdOrderNo != null">
+			and resp_order_id = #{thirdOrderNo,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<update id="updatePaymentRequestStatus">
+		update
+			cashman_payment_request
+		SET
+			status = #{targetStatus,jdbcType=INTEGER}
+		where
+			id = #{id,jdbcType=BIGINT}
+			and status = #{originStatus,jdbcType=INTEGER}
+	</update>
+	<update id="updatePaymentRequestStatusAndExipredTime">
+		update
+			cashman_payment_request
+		SET
+			status = #{targetStatus,jdbcType=INTEGER},
+			expired_at = #{expiredTime,jdbcType=TIMESTAMP}
+		where
+			id = #{id,jdbcType=BIGINT}
+			and status = #{originStatus,jdbcType=INTEGER}
+	</update>
+
+</mapper>

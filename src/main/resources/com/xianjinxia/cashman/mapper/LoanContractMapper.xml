@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.LoanContractMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.LoanContract">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contract_name" jdbcType="VARCHAR" property="contractName" />
+    <result column="contract_type" jdbcType="VARCHAR" property="contractType" />
+    <result column="trd_loan_id" jdbcType="BIGINT" property="trdLoanId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="contract_path" jdbcType="VARCHAR" property="contractPath" />
+    <result column="loan_contract_desc" jdbcType="VARCHAR" property="loanContractDesc" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, contract_name, contract_type, trd_loan_id, user_id, contract_path, loan_contract_desc, 
+    status, created_time, created_user, updated_time, updated_user, data_valid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cashman_loan_contract
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByTrdNoAndType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_loan_contract
+    where 1=1 AND trd_loan_id = #{trdLoanId,jdbcType=BIGINT} AND contract_type = #{contractType,jdbcType=VARCHAR}
+  </select>
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.LoanContract">
+    insert into cashman_loan_contract (id, contract_name, contract_type, 
+      trd_loan_id, user_id, contract_path, 
+      loan_contract_desc, status, created_time, 
+      created_user, updated_time, updated_user, 
+      data_valid)
+    values (#{id,jdbcType=BIGINT}, #{contractName,jdbcType=VARCHAR}, #{contractType,jdbcType=VARCHAR}, 
+      #{trdLoanId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{contractPath,jdbcType=VARCHAR}, 
+      #{loanContractDesc,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, now(),
+      #{createdUser,jdbcType=VARCHAR}, now(), #{updatedUser,jdbcType=VARCHAR},
+      #{dataValid,jdbcType=BIT})
+  </insert>
+
+  <select id="getByStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select <include refid="Base_Column_List" /> from cashman_loan_contract
+      where status=#{status,jdbcType=VARCHAR}
+  </select>
+  <select id="getByStatusAndType"  resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from cashman_loan_contract
+    where 1=1 AND status=#{status,jdbcType=VARCHAR} AND contract_type = #{contractType,jdbcType=VARCHAR}
+  </select>
+  <update id="updateStatusAndcontractPathById">
+      update cashman_loan_contract set status = #{status,jdbcType=VARCHAR},
+        contract_path= #{contractPath, jdbcType=VARCHAR},updated_time= now()
+      where id=#{id,jdbcType=BIGINT}
+
+  </update>
+
+  <update id="updateStatusById">
+      update cashman_loan_contract set status = #{status,jdbcType=VARCHAR}
+      where id=#{id,jdbcType=BIGINT},updated_time= now()
+  </update>
+
+</mapper>

@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.RepaymentPlanMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.RepaymentPlan">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="loan_order_id" jdbcType="BIGINT" property="loanOrderId" />
+    <result column="repayment_total_amount" jdbcType="INTEGER" property="repaymentTotalAmount" />
+    <result column="repayment_origin_amount" jdbcType="INTEGER" property="repaymentOriginAmount" />
+	<result column="repayment_origin_principal_amount" jdbcType="INTEGER" property="repaymentOriginPrincipalAmount" />
+	<result column="repayment_origin_interest_amount" jdbcType="INTEGER" property="repaymentOriginInterestAmount" />
+    <result column="repayment_income_amount" jdbcType="INTEGER" property="repaymentIncomeAmount" />
+    <result column="repayment_waiting_amount" jdbcType="INTEGER" property="repaymentWaitingAmount" />
+    <result column="repayment_principal_amount" jdbcType="INTEGER" property="repaymentPrincipalAmount" />
+    <result column="repayment_interest_amount" jdbcType="INTEGER" property="repaymentInterestAmount" />
+    <result column="repayment_plan_time" jdbcType="DATE" property="repaymentPlanTime" />
+    <result column="repayment_real_time" jdbcType="TIMESTAMP" property="repaymentRealTime" />
+    <result column="period" jdbcType="INTEGER" property="period" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_collection" jdbcType="BIT" property="isCollection" />
+    <result column="is_overdue" jdbcType="BIT" property="isOverdue" />
+    <result column="overdue_fee_amount" jdbcType="INTEGER" property="overdueFeeAmount" />
+    <result column="overdue_day_count" jdbcType="INTEGER" property="overdueDayCount" />
+	<result column="overdue_cal_time" jdbcType="DATE" property="overdueCalTime" />
+	<result column="operation_flag" jdbcType="VARCHAR" property="operationFlag" />
+    <result column="renewal_count" jdbcType="INTEGER" property="renewalCount" />
+    <result column="bad_level" jdbcType="INTEGER" property="badLevel" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+
+	<resultMap id="RepaymentNoticeBaseResultMap" type="com.xianjinxia.cashman.dto.RepaymentNoticeDto">
+		<result column="trd_loan_order_id" jdbcType="BIGINT" property="trdLoanOrderId" />
+		<result column="biz_seq_no" jdbcType="VARCHAR" property="bizSeqNo" />
+		<result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+		<result column="repayment_total_amount" jdbcType="INTEGER" property="repaymentTotalAmount" />
+		<result column="is_overdue" jdbcType="INTEGER" property="isOverdue" />
+		<result column="merchant_no" jdbcType="VARCHAR" property="merchantNo"/>
+		<result column="last_four_bank_card_no" jdbcType="VARCHAR" property="lastFourBankCardNo"/>
+	</resultMap>
+	<sql id="Repayment_Notice_Base_Column_List">
+		a.trd_loan_order_id,a.biz_seq_no,a.user_phone,a.product_category,a.merchant_no,a.last_four_bank_card_no,b.repayment_total_amount,b.is_overdue
+	</sql>
+
+  <sql id="Base_Column_List">
+    id, product_id, order_type, user_id, loan_order_id, repayment_total_amount, repayment_origin_amount,
+    repayment_origin_principal_amount,repayment_origin_interest_amount, repayment_income_amount,
+    repayment_waiting_amount, repayment_principal_amount, repayment_interest_amount,
+    repayment_plan_time, repayment_real_time, period, status, is_collection, is_overdue, 
+    overdue_fee_amount, overdue_cal_time, overdue_day_count, operation_flag, renewal_count, bad_level,
+    created_time, updated_time, remark, data_valid, version
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_repayment_plan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+	<select id="selectLastOverdueRepaymentPlanByUserId" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from
+			cashman_repayment_plan
+		where
+			user_id = #{userId,jdbcType=BIGINT}
+			and is_overdue = #{isOverdue,jdbcType=BIT}
+			and data_valid = 1
+		order by
+			created_time desc
+		limit 1
+	</select>
+
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.RepaymentPlan">
+    insert into cashman_repayment_plan (id, product_id, order_type, 
+      user_id, loan_order_id, repayment_total_amount, 
+      repayment_origin_amount, repayment_origin_principal_amount,repayment_origin_interest_amount, repayment_income_amount,
+      repayment_waiting_amount, repayment_principal_amount, 
+      repayment_interest_amount, repayment_plan_time, 
+      repayment_real_time, period, status, 
+      is_collection, is_overdue, overdue_fee_amount, 
+      overdue_day_count, operation_flag, renewal_count,
+      bad_level, created_time,remark, data_valid, version
+      )
+    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{orderType,jdbcType=INTEGER}, 
+      #{userId,jdbcType=BIGINT}, #{loanOrderId,jdbcType=BIGINT}, #{repaymentTotalAmount,jdbcType=INTEGER}, 
+      #{repaymentOriginAmount,jdbcType=INTEGER}, #{repaymentOriginPrincipalAmount,jdbcType=INTEGER},
+      #{repaymentOriginInterestAmount,jdbcType=INTEGER}, #{repaymentIncomeAmount,jdbcType=INTEGER},
+      #{repaymentWaitingAmount,jdbcType=INTEGER}, #{repaymentPrincipalAmount,jdbcType=INTEGER}, 
+      #{repaymentInterestAmount,jdbcType=INTEGER}, #{repaymentPlanTime,jdbcType=DATE},
+      #{repaymentRealTime,jdbcType=TIMESTAMP}, #{period,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{isCollection,jdbcType=BIT}, #{isOverdue,jdbcType=BIT}, #{overdueFeeAmount,jdbcType=INTEGER}, 
+      #{overdueDayCount,jdbcType=INTEGER}, #{operationFlag,jdbcType=VARCHAR}, #{renewalCount,jdbcType=INTEGER},
+      #{badLevel,jdbcType=INTEGER}, now(),
+      #{remark,jdbcType=VARCHAR}, #{dataValid,jdbcType=BIT}, #{version,jdbcType=INTEGER}
+      )
+  </insert>
+
+	<select id="selectRepaymentPlanByLoanOrderId" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from
+			cashman_repayment_plan
+		where
+			loan_order_id =  #{loanOrderId,jdbcType=BIGINT}
+			and product_id = #{productId,jdbcType=BIGINT}
+		and
+			data_valid=1
+		order by
+			period ASC
+	</select>
+
+	<select id="selectRepaymentPlanByRepaymentOrderId" resultMap="BaseResultMap" parameterType="long">
+		select
+			t1.id,
+			t1.product_id,
+			t1.order_type,
+			t1.user_id,
+			t1.loan_order_id,
+			t1.repayment_total_amount,
+			t1.repayment_origin_amount,
+			t1.repayment_origin_principal_amount,
+			t1.repayment_origin_interest_amount,
+		    t1.repayment_income_amount,
+		    t1.repayment_waiting_amount,
+		    t1.repayment_principal_amount,
+		    t1.repayment_interest_amount,
+		    t1.repayment_plan_time,
+		    t1.repayment_real_time,
+		    t1.period,
+		    t1.status,
+		    t1.is_collection,
+		    t1.is_overdue,
+		    t1.overdue_fee_amount,
+		    t1.overdue_day_count,
+		    t1.operation_flag,
+		    t1.renewal_count,
+		    t1.bad_level,
+		    t1.created_time,
+		    t1.updated_time,
+		    t1.remark,
+		    t1.data_valid,
+		    t1.version
+		from
+			cashman_repayment_plan t1
+		right join
+			cashman_repayment_plan t2
+		on
+			t1.loan_order_id = t2.loan_order_id
+		where
+			t1.id=#{0}
+		and
+			t1.data_valid=1
+
+	</select>
+
+	<select id="countByRepaymentPlanTimeAndStatus" resultType="int">
+		select
+			count(1)
+		from
+			cashman_repayment_plan
+		where
+			status = #{status,jdbcType=VARCHAR}
+			and repayment_plan_time = #{repaymentPlanTime,jdbcType=VARCHAR}
+			and data_valid=1
+	</select>
+
+
+	<select id="countByUserIdAndStatus" resultType="java.lang.Integer">
+		select
+			count(1)
+		from
+			cashman_repayment_plan
+		where
+			user_id = #{userId,jdbcType=BIGINT}
+		and data_valid=1
+		and status in
+		<foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+			${item}
+		</foreach>
+	</select>
+
+
+	<select id="countByUserIdAndIsOverdue" resultType="java.lang.Integer">
+		select
+			count(1)
+		from
+			cashman_repayment_plan
+		where
+			user_id = #{userId,jdbcType=BIGINT}
+			and is_overdue = #{isOverdue,jdbcType=BIT}
+			and data_valid = 1
+	</select>
+
+
+	<select id="selectByRepaymentPlanTimeAndOperationFlag" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from
+			cashman_repayment_plan
+		where
+			status = #{status,jdbcType=VARCHAR}
+			and repayment_plan_time = #{repaymentPlanTime,jdbcType=DATE}
+			and operation_flag = #{operationFlag,jdbcType=VARCHAR}
+			and data_valid=1
+	</select>
+
+	<update id="updateWaitingAmountById">
+		update
+			cashman_repayment_plan
+		set
+			repayment_total_amount = repayment_total_amount - #{amount,jdbcType=INTEGER},
+			repayment_waiting_amount = repayment_waiting_amount + #{amount,jdbcType=INTEGER},
+			repayment_principal_amount = repayment_principal_amount - #{principalAmount,jdbcType=INTEGER},
+			repayment_interest_amount = repayment_interest_amount - #{interestAmount,jdbcType=INTEGER},
+			overdue_fee_amount = overdue_fee_amount - #{overdueAmount,jdbcType=INTEGER},
+			version = version + 1,
+			updated_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+
+	<update id="updateIncomeAmountById">
+		update
+			cashman_repayment_plan
+		set
+			repayment_income_amount = repayment_income_amount + #{amount,jdbcType=INTEGER},
+			repayment_waiting_amount = repayment_waiting_amount - #{amount,jdbcType=INTEGER},
+			version = version + 1,
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+				repayment_real_time = now(),
+			</if>
+			updated_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+
+
+
+	<update id="updateIsOverdueById">
+		update
+			cashman_repayment_plan
+		set
+			is_overdue = #{isOverdue,jdbcType=BIT},
+			version = version + 1,
+			updated_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+
+	<update id="updateWithholdOperationFlagById">
+		update
+			cashman_repayment_plan
+		set
+			operation_flag = #{operationFlag,jdbcType=VARCHAR},
+			version = version + 1,
+			updated_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+
+	<update id="updateOverdueOperationFlagById">
+		update
+			cashman_repayment_plan
+		set
+			is_overdue = #{isOverdue,jdbcType=BIT},
+			operation_flag = #{operationFlag,jdbcType=VARCHAR},
+			version = version + 1,
+			updated_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+
+	<update id="updateOverdueDayAndFeeById">
+		update
+			cashman_repayment_plan
+		set
+			repayment_total_amount = #{repaymentTotalAmount,jdbcType=INTEGER},
+			is_overdue = #{isOverdue,jdbcType=BIT},
+			overdue_day_count = #{overdueDayCount,jdbcType=INTEGER},
+			overdue_fee_amount = overdue_fee_amount + #{overdueFeeAmount,jdbcType=INTEGER},
+			version = version + 1,
+			<if test="operationFlag != null">
+				operation_flag = #{operationFlag,jdbcType=VARCHAR},
+			</if>
+			updated_time = now(),
+			overdue_cal_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+
+	<update id="updateRenewal">
+		update
+			cashman_repayment_plan
+		set
+			repayment_plan_time = #{repaymentPlanTime,jdbcType=TIMESTAMP},
+			renewal_count = renewal_count + 1,
+			version = version + 1,
+			updated_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+	<update id="updateDeductAmountById">
+		update
+			cashman_repayment_plan
+		set
+			repayment_total_amount = repayment_total_amount - #{amount,jdbcType=INTEGER},
+			repayment_income_amount = repayment_income_amount + #{amount,jdbcType=INTEGER},
+			overdue_fee_amount = overdue_fee_amount - #{amount,jdbcType=INTEGER},
+			version = version + 1,
+			status = #{status,jdbcType=INTEGER},
+			updated_time = now()
+		where
+			id = #{id,jdbcType=BIGINT}
+			and version =  #{version,jdbcType=INTEGER}
+			and data_valid = 1
+	</update>
+
+	<select id="getRepaymentPlanListForNotice"  resultMap="RepaymentNoticeBaseResultMap">
+		select
+		<include refid="Repayment_Notice_Base_Column_List"/>
+		from
+		cashman_loan_order a ,cashman_repayment_plan b
+		where a.trd_loan_order_id = b.loan_order_id
+			and a.status = #{loanStatus,jdbcType=INTEGER}
+			and a.data_valid =1
+			and b.data_valid=1
+			and b.status = #{repaymentStatus,jdbcType=INTEGER}
+			and b.repayment_plan_time = #{repaymentPlanTime,jdbcType=TIMESTAMP}
+			and a.product_category = #{productCategory,jdbcType=INTEGER}
+			and a.merchant_no =#{merchantNo,jdbcType=VARCHAR}
+			and a.product_id = #{productId,jdbcType=BIGINT}
+	</select>
+	<select id="getPartRepaymentNotice"  resultMap="RepaymentNoticeBaseResultMap">
+		select
+		<include refid="Repayment_Notice_Base_Column_List"/>
+		from
+		cashman_loan_order a ,cashman_repayment_plan b
+		where a.trd_loan_order_id = #{loanOrderId,jdbcType=BIGINT}
+		and a.trd_loan_order_id = b.loan_order_id
+		and a.data_valid =1
+		and b.data_valid=1
+		and a.status in
+		<foreach item="item" index="index" collection="loanStatus" open="(" separator="," close=")">
+			${item}
+		</foreach>
+		and b.status in
+		<foreach item="item" index="index" collection="repaymentStatus" open="(" separator="," close=")">
+			${item}
+		</foreach>
+	</select>
+
+	<update id="updateStatus">
+		update cashman_repayment_plan
+		set status=#{status},
+		updated_time=now()
+		where loan_order_id=#{loanOrderId}
+	</update>
+
+	<update id="updateRepaymentPlanTime">
+		update cashman_repayment_plan
+		set repayment_plan_time=#{repaymentPlanTime,jdbcType=DATE},
+		updated_time=now()
+		where loan_order_id=#{loanOrderId} and period=#{period}
+	</update>
+	<update id="updateIncomeAmountByCMS">
+		update
+		cashman_repayment_plan
+		set
+		repayment_income_amount = repayment_income_amount + #{amount,jdbcType=INTEGER},
+		repayment_total_amount = repayment_total_amount - #{amount,jdbcType=INTEGER},
+		version = version + 1,
+		<if test="status != null">
+			status = #{status,jdbcType=INTEGER},
+		</if>
+		updated_time = now()
+		where
+		id = #{id,jdbcType=BIGINT}
+		and version =  #{version,jdbcType=INTEGER}
+		and data_valid = 1
+	</update>
+
+	<update id="updateRepaymentPlanAmountById" parameterType="com.xianjinxia.cashman.dto.AlipayRepamentPlanDto">
+		update
+		cashman_repayment_plan
+		set
+		repayment_total_amount = repayment_total_amount - #{amount,jdbcType=INTEGER},
+		repayment_income_amount = repayment_income_amount + #{amount,jdbcType=INTEGER},
+		repayment_principal_amount = repayment_principal_amount - #{principalAmount,jdbcType=INTEGER},
+		repayment_interest_amount = repayment_interest_amount - #{interestAmount,jdbcType=INTEGER},
+		overdue_fee_amount = overdue_fee_amount - #{overdueAmount,jdbcType=INTEGER},
+		repayment_real_time = #{repaymentTime,jdbcType=TIMESTAMP},
+		version = version + 1,
+		<if test="isOverdue != null">
+			is_overdue = #{isOverdue,jdbcType=BIT},
+		</if>
+		<if test="overdueDayCount != null">
+			overdue_day_count = #{overdueDayCount,jdbcType=INTEGER},
+		</if>
+		<if test="remark != null">
+			remark = #{remark,jdbcType=VARCHAR},
+		</if>
+		<if test="status != null">
+			status = #{status,jdbcType=INTEGER},
+		</if>
+		updated_time = now()
+		where
+		id = #{id,jdbcType=BIGINT}
+		and version =  #{version,jdbcType=INTEGER}
+		and data_valid = 1
+	</update>
+
+	<update id="updateRepaymentPlanAmount" parameterType="com.xianjinxia.cashman.dto.AlipayRepamentPlanDto">
+		update
+		cashman_repayment_plan
+		set
+		repayment_total_amount = #{repaymentTotalAmount,jdbcType=INTEGER},
+		repayment_income_amount = repayment_income_amount + #{amount,jdbcType=INTEGER},
+		repayment_principal_amount = #{principalAmount,jdbcType=INTEGER},
+		repayment_interest_amount = #{interestAmount,jdbcType=INTEGER},
+		overdue_fee_amount = #{overdueAmount,jdbcType=INTEGER},
+		repayment_real_time = #{repaymentTime,jdbcType=TIMESTAMP},
+		version = version + 1,
+		<if test="isOverdue != null">
+			is_overdue = #{isOverdue,jdbcType=BIT},
+		</if>
+		<if test="overdueDayCount != null">
+			overdue_day_count = #{overdueDayCount,jdbcType=INTEGER},
+		</if>
+		<if test="remark != null">
+			remark = #{remark,jdbcType=VARCHAR},
+		</if>
+		<if test="status != null">
+			status = #{status,jdbcType=INTEGER},
+		</if>
+		updated_time = now()
+		where
+		id = #{id,jdbcType=BIGINT}
+		and version =  #{version,jdbcType=INTEGER}
+		and data_valid = 1
+	</update>
+
+</mapper>

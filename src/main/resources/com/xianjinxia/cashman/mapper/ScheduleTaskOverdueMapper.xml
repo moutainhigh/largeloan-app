@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.ScheduleTaskOverdueMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.ScheduleTaskOverdue">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="repayment_order_id" jdbcType="BIGINT" property="repaymentOrderId" />
+    <result column="is_repaymented" jdbcType="BIT" property="isRepaymented" />
+    <result column="is_collection" jdbcType="BIT" property="isCollection" />
+    <result column="last_calculate_time" jdbcType="DATE" property="lastCalculateTime" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, repayment_order_id, is_repaymented, is_collection, last_calculate_time, created_time, updated_time, data_valid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cashman_schedule_task_overdue
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.ScheduleTaskOverdue">
+    insert into cashman_schedule_task_overdue (
+      id,
+      user_id,
+      repayment_order_id,
+      is_repaymented,
+      is_collection,
+      last_calculate_time,
+      created_time,
+      updated_time,
+      data_valid
+    ) values (
+      #{id,jdbcType=BIGINT},
+      #{userId,jdbcType=BIGINT},
+      #{repaymentOrderId,jdbcType=BIGINT},
+      #{isRepaymented,jdbcType=BIT},
+      #{isCollection,jdbcType=BIT},
+      #{lastCalculateTime,jdbcType=DATE},
+      #{createdTime,jdbcType=TIMESTAMP},
+      #{updatedTime,jdbcType=TIMESTAMP},
+      #{dataValid,jdbcType=BIT}
+    )
+  </insert>
+
+  <update id="updateIsCollectionById">
+    update
+      cashman_schedule_task_overdue
+    set
+      is_collection = #{isCollection,jdbcType=BIT},
+      updated_time = now()
+    where
+      id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <update id="updateIsRepaymentedByOrderId">
+    update
+      cashman_schedule_task_overdue
+    set
+      is_repaymented = #{isRepaymented,jdbcType=BIT},
+      updated_time = now()
+    where
+      repayment_order_id = #{repaymentOrderId,jdbcType=BIGINT}
+  </update>
+
+
+  <update id="updateLastCalculateTimeById">
+    update
+      cashman_schedule_task_overdue
+    set
+      last_calculate_time = #{lastCalculateTime,jdbcType=DATE},
+      updated_time = now()
+    where
+      id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="selectForNotifyCollection" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM
+      cashman_schedule_task_overdue
+    WHERE
+      DATE_FORMAT(created_time,'%Y-%m-%d') &lt;= #{createdTime,jdbcType=VARCHAR}
+      and is_collection = #{isCollection,jdbcType=BIT}
+      and is_repaymented = #{isRepaymented,jdbcType=BIT}
+      and data_valid=1
+  </select>
+
+  <select id="selectForCalculate" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM
+      cashman_schedule_task_overdue
+    WHERE
+      last_calculate_time != #{lastCalculateTime,jdbcType=DATE}
+      and is_repaymented = 0
+      and data_valid=1
+  </select>
+</mapper>

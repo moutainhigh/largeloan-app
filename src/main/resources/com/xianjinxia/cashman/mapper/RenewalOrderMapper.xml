@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.RenewalOrderMapper">
+	<resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.RenewalOrder">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="repayment_plan_id" jdbcType="BIGINT" property="repaymentPlanId" />
+		<result column="payment_request_id" jdbcType="BIGINT" property="paymentRequestId" />
+		<result column="loan_order_id" jdbcType="BIGINT" property="loanOrderId" />
+		<result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+		<result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="data_valid" jdbcType="TINYINT" property="dataValid" />
+		<result column="user_id" jdbcType="BIGINT" property="userId" />
+		<result column="renewal_fee" jdbcType="INTEGER" property="renewalFee" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="pre_repayment_time" jdbcType="TIMESTAMP" property="preRepaymentTime" />
+		<result column="renewal_repayment_time" jdbcType="TIMESTAMP" property="renewalRepaymentTime" />
+		<result column="renewal_amount" jdbcType="INTEGER" property="renewalAmount" />
+		<result column="interest_amount" jdbcType="INTEGER" property="interestAmount" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="renewal_unique" jdbcType="VARCHAR" property="renewalUnique" />
+	</resultMap>
+
+
+	<insert id="insert" parameterType="com.xianjinxia.cashman.domain.RenewalOrder" useGeneratedKeys="true" keyProperty="id">
+		insert into cashman_renewal_order (repayment_plan_id,payment_request_id,
+		loan_order_id,created_time, updated_time,user_id,renewal_fee,status,
+		pre_repayment_time,renewal_repayment_time,renewal_amount,interest_amount,remark,renewal_unique
+		)
+		values (#{repaymentPlanId,jdbcType=BIGINT},#{paymentRequestId,jdbcType=BIGINT},#{loanOrderId,jdbcType=BIGINT}, now(), now(),
+		#{userId,jdbcType=BIGINT},#{renewalFee,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{preRepaymentTime,jdbcType=TIMESTAMP},
+		#{renewalRepaymentTime,jdbcType=TIMESTAMP},#{renewalAmount,jdbcType=TIMESTAMP},#{interestAmount,jdbcType=INTEGER},
+		#{remark,jdbcType=VARCHAR},#{renewalUnique,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="update" parameterType="com.xianjinxia.cashman.domain.RenewalOrder">
+		update cashman_renewal_order
+		set status = #{status},updated_time=now(),renewal_unique = #{renewalUnique} 
+		where repayment_plan_id=#{repaymentPlanId} and status=0
+	</update>
+	
+	<select id="countRenewalOrder" parameterType="com.xianjinxia.cashman.domain.RenewalOrder">
+	   select count(*) from cashman_renewal_order where repayment_plan_id=#{repaymentPlanId} and status=#{status}
+	</select>
+	
+	
+	<select id="getRepaymentPlanIdByPaymentRequestId" parameterType="java.lang.Long" resultType="java.util.Map">
+	   select id id,repayment_plan_id repaymentPlanId from cashman_renewal_order where payment_request_id=#{paymentRequestId}
+	</select>
+	
+
+</mapper>

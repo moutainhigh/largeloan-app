@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.RiskQueryMapper">
+    <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.LoanOrder">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="trd_loan_order_id" jdbcType="BIGINT" property="trdLoanOrderId" />
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="biz_seq_no" jdbcType="VARCHAR" property="bizSeqNo" />
+        <result column="order_type" jdbcType="VARCHAR" property="orderType" />
+        <result column="order_amount" jdbcType="INTEGER" property="orderAmount" />
+        <result column="fee_amount" jdbcType="INTEGER" property="feeAmount" />
+        <result column="interest_amount" jdbcType="INTEGER" property="interestAmount" />
+        <result column="payment_amount" jdbcType="INTEGER" property="paymentAmount" />
+        <result column="repayment_amount" jdbcType="INTEGER" property="repaymentAmount" />
+        <result column="periods" jdbcType="INTEGER" property="periods" />
+        <result column="product_id" jdbcType="BIGINT" property="productId" />
+        <result column="product_category" jdbcType="INTEGER" property="productCategory" />
+        <result column="user_bank_card_id" jdbcType="BIGINT" property="userBankCardId" />
+        <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+        <result column="last_four_bank_card_no" jdbcType="VARCHAR" property="lastFourBankCardNo" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="loan_usage" jdbcType="VARCHAR" property="loanUsage" />
+        <result column="user_type" jdbcType="BIT" property="userType" />
+        <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="source" jdbcType="VARCHAR" property="source" />
+        <result column="terminal" jdbcType="VARCHAR" property="terminal" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="data_valid" jdbcType="BIT" property="dataValid" />
+        <result column="trace_no" jdbcType="VARCHAR" property="traceNo" />
+        <result column="is_depository" jdbcType="VARCHAR" property="isDepository" />
+        <result column="term_unit" jdbcType="VARCHAR" property="termUnit" />
+        <result column="term_rate" jdbcType="DECIMAL" property="termRate" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, trd_loan_order_id, user_id, biz_seq_no, order_type, order_amount, fee_amount, interest_amount,
+    payment_amount, repayment_amount, periods, product_id, product_category, user_bank_card_id,loan_usage,
+    bank_name, last_four_bank_card_no, remark, user_type, user_phone, user_name, status,
+    source, terminal, created_time, created_user, updated_time, data_valid, trace_no,is_depository,term_unit,term_rate
+    </sql>
+
+    <select id="selectUserLoanOrderListByProductId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from cashman_loan_order
+        where 1=1
+        <if test="userId != null">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="productId != null">
+            and product_id = #{productId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="selectBybizSeqNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from cashman_loan_order
+        where 1=1
+        <if test="trdLoanOrderId != null">
+            and id = #{trdLoanOrderId,jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+
+</mapper>

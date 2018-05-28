@@ -1,0 +1,70 @@
+
+
+spring:
+    datasource:
+        druid:
+            url: jdbc:mysql://118.31.40.158:3306/cashman?useUnicode=true&characterEncoding=UTF-8
+            username: root
+            password: lydXpCsDGY67dTii
+            type: com.alibaba.druid.pool.DruidDataSource
+            driver-class-name: com.mysql.jdbc.Driver
+            initial-size: 2
+            max-active: 10
+            min-idle: 5
+            max-wait: 60000
+            validation-query: SELECT 1
+            test-on-borrow: false
+            test-on-return: false
+            test-while-idle: true
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 25200000
+            remove-abandoned: true
+            remove-abandoned-timeout: 1800
+            logAbandoned: true
+            filters: stat
+            pool-prepared-statement: true
+            max-open-prepared-statements: 100
+
+
+server:
+    port: 8080
+
+
+ext:
+    swagger:
+        enabled: true
+    activeMqConfiguration:
+        brokerUrl: failover:(tcp://127.0.0.1:61616)
+        queueTableName: cashman_mq_message
+        queueName: cashman_queue
+        queueMaxCount: 50000
+        isCreateTable: 1
+    redisCluster:
+#        clusterNodes: 116.62.188.38:7000,116.62.188.38:7001,116.62.188.38:7002,116.62.188.38:7003,116.62.188.38:7004,116.62.188.38:7005
+#        clusterNodes: 192.168.6.65:7000,192.168.6.65:7001,192.168.6.65:7002,192.168.6.65:7003,192.168.6.65:7004,192.168.6.65:7005
+        # clusterNodes: 192.168.6.65:7000,192.168.6.65:7001
+        # 预生产环境 redis 地址  test
+        clusterNodes: 192.168.6.122:17000,192.168.6.122:17001,192.168.6.122:17002,192.168.6.122:17003,192.168.6.122:17004,192.168.6.122:17005
+        commandTimeout: 5
+        password: Sh@nghai
+        timeout: 3000
+        maxRedirections: 6
+        tryNum: 100
+        expireSeconds: 120
+    loanConfig:
+      renewalFee: 2000
+    smsConfig:
+      url: 120.27.227.217:8080/uninoty/api/message/send-by-type
+    oldCashmanServerAddressConfig:
+      serverAddress: 120.55.44.90:9000
+    sdkInitConfig:
+      projectAppId: 1111563517
+      projectAppSecret: 95439b0863c241c63a861b87d1e647b7
+      projectUrl: http://121.40.164.61:8080/tgmonitor/rest/app!getAPIInfo2
+    contractRelatedConfig:
+      contractUploadFolder: contract/bigloan/
+      cloudSpaceName: cashman-app
+      ossUrlExpire: 1800000
+    moneyInterestCalc:
+      bigAmount: ECAI             #大额本息计算方式配置，详情参考MoneyCalcEnum类
+

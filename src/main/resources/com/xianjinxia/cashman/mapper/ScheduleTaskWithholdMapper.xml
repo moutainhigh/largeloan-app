@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianjinxia.cashman.mapper.ScheduleTaskWithholdMapper">
+  <resultMap id="BaseResultMap" type="com.xianjinxia.cashman.domain.ScheduleTaskWithhold">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="repayment_order_id" jdbcType="BIGINT" property="repaymentOrderId" />
+    <result column="withhold_date" jdbcType="DATE" property="withholdDate" />
+    <result column="retry_times" jdbcType="INTEGER" property="retryTimes" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="data_valid" jdbcType="BIT" property="dataValid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, repayment_order_id, withhold_date, retry_times, status, created_time, updated_time,
+    data_valid
+  </sql>
+  <insert id="insert" parameterType="com.xianjinxia.cashman.domain.ScheduleTaskWithhold">
+    insert into cashman_schedule_task_withhold (id, repayment_order_id, withhold_date,
+      retry_times, status, created_time,
+      updated_time, data_valid)
+    values (#{id,jdbcType=BIGINT}, #{repaymentOrderId,jdbcType=BIGINT}, #{withholdDate,jdbcType=DATE},
+      #{retryTimes,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP},
+      #{updatedTime,jdbcType=TIMESTAMP}, #{dataValid,jdbcType=BIT})
+  </insert>
+  <update id="updateWithholdStatus">
+    update
+      cashman_schedule_task_withhold
+    set
+      status = #{status,jdbcType=INTEGER},
+      updated_time = now()
+    where
+      repayment_order_id = #{repaymentOrderId,jdbcType=BIGINT}
+      and data_valid = 1
+  </update>
+
+  <update id="updateWithholdRetryTimesAndStatus">
+    update
+      cashman_schedule_task_withhold
+    set
+      status = #{status,jdbcType=INTEGER},
+      retry_times = retry_times + 1,
+      updated_time = now()
+    where
+      repayment_order_id = #{repaymentOrderId,jdbcType=BIGINT}
+      and data_valid = 1
+  </update>
+
+  <select id="selectWithholdOrderList" parameterType="com.xianjinxia.cashman.domain.ScheduleTaskWithhold" resultMap="BaseResultMap">
+      SELECT
+        <include refid="Base_Column_List"/>
+      FROM
+        cashman_schedule_task_withhold
+      WHERE
+        withhold_date = #{withholdDate,jdbcType=DATE}
+        and retry_times &lt; #{maxRetryTimes,jdbcType=INTEGER}
+        and status = #{status,jdbcType=INTEGER}
+        and data_valid = 1
+  </select>
+
+</mapper>
